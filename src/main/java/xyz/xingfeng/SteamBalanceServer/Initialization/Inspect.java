@@ -8,8 +8,8 @@ import java.io.IOException;
 @Slf4j
 public class Inspect {
     public Inspect(){
-        log.info("检查'cookie'文件是否存在");
-        File file = new File("config/cookie");
+        log.info("检查'SteamCookie'文件是否存在");
+        File file = new File("config/SteamCookie");
         if (!file.exists()){
             //不存在
             log.info("文件不存在，进行初始化");
@@ -20,7 +20,23 @@ public class Inspect {
                     log.error("创建失败");
                 }
             } catch (IOException e) {
-                log.error("创建文件”cookie”时发生了未知错误”");
+                log.error("创建文件”SteamCookie”时发生了未知错误”");
+                throw new RuntimeException(e);
+            }
+        }
+        log.info("检查'BuffCookie'文件是否存在");
+        file = new File("config/BuffCookie");
+        if (!file.exists()){
+            //不存在
+            log.info("文件不存在，进行初始化");
+            try {
+                if (file.createNewFile()){
+                    log.info("创建成功");
+                }else {
+                    log.error("创建失败");
+                }
+            } catch (IOException e) {
+                log.error("创建文件”BuffCookie”时发生了未知错误”");
                 throw new RuntimeException(e);
             }
         }
@@ -55,5 +71,6 @@ public class Inspect {
                 throw new RuntimeException(e);
             }
         }
+        log.info("初始化完成");
     }
 }

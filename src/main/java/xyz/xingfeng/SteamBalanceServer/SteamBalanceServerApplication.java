@@ -10,10 +10,10 @@ import xyz.xingfeng.SteamBalanceServer.Initialization.Inspect;
 public class SteamBalanceServerApplication {
 
 	public static void main(String[] args) {
+		SpringApplication.run(SteamBalanceServerApplication.class, args);
 		//开始初始化程序
 		log.info("检查必要文件");
 		new Inspect();
-		SpringApplication.run(SteamBalanceServerApplication.class, args);
 	}
 
 }
