@@ -1,5 +1,6 @@
 package xyz.xingfeng.SteamBalanceServer.Steam;
 
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -11,18 +12,31 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+/**
+ * 这个类用来查看饰品的价格
+ */
+@Slf4j
 public class Price {
 
     //求购价
     String purchasePrice;
     //出售价
     String sellingPrice;
+
+    int code = 199;
     public static final String urL = "https://steamcommunity.com/market/itemordershistogram?country=CN&language=schinese&currency=23&item_nameid={{id}}&two_factor=0";
     private StringBuilder response;
+
+    public int getCode() {
+        return code;
+    }
 
     public Price(String item_id){
         int num = 0;
         while (true) {
+            if (num >= 5){
+                break;
+            }
             try {
                 //构建请求url
                 URL url = new URL(urL.replace("{{id}}",item_id));
@@ -30,7 +44,6 @@ public class Price {
                 urlc.addRequestProperty("Cookie", SteamCookie.STEAMCOOKIE);
                 urlc.addRequestProperty("Accept-Language","zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6");
                 urlc.setRequestMethod("GET");
-
                 //是否成功
                 if (urlc.getResponseCode() == 200) {
                     //获取返回流
@@ -43,7 +56,13 @@ public class Price {
                     }
                     bufferedReader.close();
                     inputStream.close();
-                } else {
+                }else if (urlc.getResponseCode() == 429){
+                    log.warn("请求次数太多，请稍后尝试");
+                    sellingPrice = "0";
+                    purchasePrice = "0";
+                    this.code = 429;
+                    return;
+                }else {
                     sellingPrice = "0";
                     purchasePrice = "0";
                     num++;
@@ -70,10 +89,12 @@ public class Price {
 //                System.out.println(parse.getElementsByClass("market_commodity_orders_header_promote").get(1).text());
                 //得出最低寄售价
                 sellingPrice = parse.getElementsByClass("market_commodity_orders_header_promote").get(1).text();
-            } catch (Exception ignored) {
-
+                this.code = 200;
+            } catch (Exception e) {
+                num++;
+                continue;
             }
-            return;
+            break;
         }
     }
 

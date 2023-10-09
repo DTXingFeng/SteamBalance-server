@@ -1,5 +1,8 @@
 package xyz.xingfeng.SteamBalanceServer.Tool;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class PriceItem {
     private float sell_min_price;
     private float quick_price;
@@ -21,7 +24,12 @@ public class PriceItem {
     }
 
     private float toFloat(String price){
-        String p1 = price.replaceAll("¥", "").replaceAll(",","").trim();
+        String p1 = "0";
+        try {
+            p1 = price.replaceAll("¥", "").replaceAll(",","").trim();
+        }catch (Exception e){
+            log.error("大概率是爬虫未爬到价格返回空值了");
+        }
         return Float.parseFloat(p1);
     }
 }
