@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import xyz.xingfeng.SteamBalanceServer.Initialization.Inspect;
+import xyz.xingfeng.SteamBalanceServer.practice.CsPractice;
 import xyz.xingfeng.SteamBalanceServer.practice.DotaPractice;
 
 @Slf4j
@@ -16,7 +17,7 @@ public class SteamBalanceServerApplication {
 		log.info("检查必要文件");
 		new Inspect();
 		try {
-			new DotaPractice();
+			new CsPractice();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

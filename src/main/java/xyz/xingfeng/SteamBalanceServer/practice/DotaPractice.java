@@ -1,5 +1,6 @@
 package xyz.xingfeng.SteamBalanceServer.practice;
 
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import xyz.xingfeng.SteamBalanceServer.Buff.DotaGetList;
@@ -13,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+@Slf4j
 public class DotaPractice {
     public DotaPractice() throws Exception {
 
@@ -25,37 +27,37 @@ public class DotaPractice {
                     //小于30在售就不要浪费时间了
                     continue;
                 }
-                System.out.println("--------" + item.getName() + "--------");
-                System.out.println("buff在售底价:" + item.getSell_min_price());
-                System.out.println("buff求购最高价:" + item.getQuick_price());
-                System.out.println("buff在售量" + item.getSell_num());
+                log.info("--------" + item.getName() + "--------");
+                log.info("buff在售底价:" + item.getSell_min_price());
+                log.info("buff求购最高价:" + item.getQuick_price());
+                log.info("buff在售量" + item.getSell_num());
                 //对比steam价格
                 PriceItem sousuo = sousuo(item.getName());
                 //算出优惠
                 //buff底价/steam最高求购价*1.15
                 double offers = Float.parseFloat(item.getSell_min_price()) / sousuo.getQuick_price() * 1.15;
-                System.out.println("最终优惠" + offers);
+                log.info("最终优惠" + offers);
                 //需要多少折才能持平收益
                 //steam售价*打折 = buff出售价格*0.982的手续费
                 //打折 = buff出售价格*0.982的手续费/steam售价
                 double quickPrice = Float.parseFloat(item.getQuick_price())*0.982 /sousuo.getSell_min_price();
                 double sellPrice = Float.parseFloat(item.getSell_min_price())*0.982 /sousuo.getSell_min_price();
 
-                System.out.println("如果打算丢求购，需要" + quickPrice + "折余额才能回本");
-                System.out.println("如果打算慢慢卖，需要" + sellPrice + "折余额才能回本");
+                log.info("如果打算丢求购，需要" + quickPrice + "折余额才能回本");
+                log.info("如果打算慢慢卖，需要" + sellPrice + "折余额才能回本");
                 //计算出如果提现会赚多少钱
                 //假设是八折余额
                 //buff最高求购价-steam最低售价*0.8
                 //buff的dota2板块收取1.8%的手续费
                 double put = (Float.parseFloat(item.getQuick_price()) - sousuo.getSell_min_price() * 0.8) * 0.982;
                 if (offers < 0.8) {
-                    System.out.println("卧槽出了");
+                    log.info("卧槽出了");
                 }
                 if (put > 0.0 && sousuo.getSell_min_price() != 0.0){
-                    System.out.println("买"+item.getName()+"可以赚" + put);
+                    log.info("买"+item.getName()+"可以赚" + put);
 
                     double zhuan = (100/(sousuo.getSell_min_price() * 0.8)) * put;
-                    System.out.println("每一百块钱可赚" + zhuan);
+                    log.info("每一百块钱可赚" + zhuan);
                 }
             }
         }
@@ -86,8 +88,8 @@ public class DotaPractice {
             if (itemName.equals(name)){
                 PriceItem pi = new PriceItem();
                 Price price = new Price(item.getString("item_id"));
-                System.out.println("steam在售底价:"+price.getSellingPrice());
-                System.out.println("steam求购最高价:"+price.getPurchasePrice());
+                log.info("steam在售底价:"+price.getSellingPrice());
+                log.info("steam求购最高价:"+price.getPurchasePrice());
                 pi.setQuick_price(price.getPurchasePrice());
                 pi.setSell_min_price(price.getSellingPrice());
                 //只要一个
@@ -102,13 +104,12 @@ public class DotaPractice {
                 continue;
             }
             Price price = new Price(item.getId());
-//            System.out.println("--------"+item.getName()+"--------");
-            System.out.println("steam在售底价:"+price.getSellingPrice());
-            System.out.println("steam求购最高价:"+price.getPurchasePrice());
+            log.info("steam在售底价:"+price.getSellingPrice());
+            log.info("steam求购最高价:"+price.getPurchasePrice());
             pi.setQuick_price(price.getPurchasePrice());
             pi.setSell_min_price(price.getSellingPrice());
             //只要一个
-            System.out.println(item.getName());
+            log.info(item.getName());
             break;
         }
         return pi;

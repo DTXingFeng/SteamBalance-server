@@ -1,5 +1,6 @@
 package xyz.xingfeng.SteamBalanceServer.practice;
 
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import xyz.xingfeng.SteamBalanceServer.Buff.CSGetList;
@@ -13,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+@Slf4j
 public class CsPractice {
     public CsPractice() throws Exception {
 
@@ -21,29 +23,29 @@ public class CsPractice {
             CSGetList getList = new CSGetList();
             ArrayList<Item> items = getList.getItems();
             for (Item item : items) {
-                System.out.println("--------" + item.getName() + "--------");
-                System.out.println("buff在售底价:" + item.getSell_min_price());
-                System.out.println("buff求购最高价:" + item.getQuick_price());
-                System.out.println("buff在售量" + item.getSell_num());
+                log.info("--------" + item.getName() + "--------");
+                log.info("buff在售底价:" + item.getSell_min_price());
+                log.info("buff求购最高价:" + item.getQuick_price());
+                log.info("buff在售量" + item.getSell_num());
                 //对比steam价格
                 PriceItem sousuo = sousuo(item.getName());
                 //算出优惠
                 //buff底价/steam最高求购价*1.15
                 double offers = Float.parseFloat(item.getSell_min_price()) / sousuo.getQuick_price() * 1.15;
-                System.out.println("最终优惠" + offers);
+                log.info("最终优惠" + offers);
                 //计算出如果提现会赚多少钱
                 //假设是八折余额
                 //buff最高求购价-steam最低售价*0.8
                 //buff的cs板块收取2.5%的手续费
                 double put = (Float.parseFloat(item.getQuick_price()) - sousuo.getSell_min_price() * 0.8) * 0.975;
                 if (offers < 0.8) {
-                    System.out.println("卧槽出了");
+                    log.info("卧槽出了");
                 }
                 if (put > 0.0 && sousuo.getSell_min_price() != 0.0){
-                    System.out.println("买"+item.getName()+"可以赚" + put);
+                    log.info("买"+item.getName()+"可以赚" + put);
 
                     double zhuan = (100/(sousuo.getSell_min_price() * 0.8)) * put;
-                    System.out.println("每一百块钱可赚" + zhuan);
+                    log.info("每一百块钱可赚" + zhuan);
                 }
             }
         }
@@ -73,8 +75,8 @@ public class CsPractice {
             if (itemName.equals(name)){
                 PriceItem pi = new PriceItem();
                 Price price = new Price(item.getString("item_id"));
-                System.out.println("steam在售底价:"+price.getSellingPrice());
-                System.out.println("steam求购最高价:"+price.getPurchasePrice());
+                log.info("steam在售底价:"+price.getSellingPrice());
+                log.info("steam求购最高价:"+price.getPurchasePrice());
                 pi.setQuick_price(price.getPurchasePrice());
                 pi.setSell_min_price(price.getSellingPrice());
                 //只要一个
@@ -89,13 +91,12 @@ public class CsPractice {
                 continue;
             }
             Price price = new Price(item.getId());
-//            System.out.println("--------"+item.getName()+"--------");
-            System.out.println("steam在售底价:"+price.getSellingPrice());
-            System.out.println("steam求购最高价:"+price.getPurchasePrice());
+            log.info("steam在售底价:"+price.getSellingPrice());
+            log.info("steam求购最高价:"+price.getPurchasePrice());
             pi.setQuick_price(price.getPurchasePrice());
             pi.setSell_min_price(price.getSellingPrice());
             //只要一个
-            System.out.println(item.getName());
+            log.info(item.getName());
             break;
         }
         return pi;
