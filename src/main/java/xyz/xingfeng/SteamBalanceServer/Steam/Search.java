@@ -71,17 +71,19 @@ public class Search {
                         //获得价格
                         String normal_price = element.select(".normal_price .normal_price").get(0).text();
                         item.setNormalPrice(normal_price);
+                        //获得游戏名称
+                        String market_listing_game_name = element.select(".market_listing_game_name").get(0).text();
                         //获得销售价格
                         String sale_price = element.getElementsByClass("sale_price").get(0).text();
                         item.setSalePrice(sale_price);
                         //获得id
-                        String id = getId(market_listing_item_name);
+                        String id = getId(market_listing_game_name,market_listing_item_name);
                         if (id == null) {
                             id = new GetItemId(href).getId();
                             if (id.equals("0")) {
                                 continue;
                             }
-                            addItemId(id, market_listing_item_name);
+                            addItemId(market_listing_game_name,id, market_listing_item_name);
                         }
                         item.setId(id);
                         items.add(item);
@@ -102,8 +104,16 @@ public class Search {
             }
         }
     }
-    public String getId(String name){
-        FileDo fileDo = new FileDo(new File("config/items.json"));
+    public String getId(String gameName,String name){
+        FileDo fileDo = null;
+        if (gameName.equals("Dota 2")){
+            fileDo = new FileDo(new File("config/dotaItems.json"));
+        }else if (gameName.equals("Counter-Strike 2")){
+            fileDo = new FileDo(new File("config/csItems.json"));
+        }
+        if (fileDo == null){
+            return null;
+        }
         String copy = fileDo.copy();
         JSONObject jsonObject = new JSONObject(copy);
         JSONArray data = jsonObject.getJSONArray("data");
@@ -120,8 +130,16 @@ public class Search {
         return items;
     }
 
-    public void addItemId(String id, String name){
-        FileDo fileDo = new FileDo(new File("config/items.json"));
+    public void addItemId(String gameName,String id, String name){
+        FileDo fileDo = null;
+        if (gameName.equals("Dota 2")){
+            fileDo = new FileDo(new File("config/dotaItems.json"));
+        }else if (gameName.equals("Counter-Strike 2")){
+            fileDo = new FileDo(new File("config/csItems.json"));
+        }
+        if (fileDo == null){
+            return;
+        }
         JSONObject jsonObject = new JSONObject(fileDo.copy());
         JSONArray data = jsonObject.getJSONArray("data");
         JSONObject json = new JSONObject();
