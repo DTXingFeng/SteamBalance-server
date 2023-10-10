@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>运行设置</title>
+		<link rel="stylesheet" href="plugin/bootstrap-5.3.0-alpha1-dist/css/bootstrap.css"/>
+		<link rel="stylesheet" href="css/run.css">
+	</head>
+	<body>
+		<div id="app" class="container">
+			<h2 class="text_con">设置面板</h2>
+			<div class="row">
+				<div class="col-12 col-md-6 text_con console box">
+					<button type="button" class="btn btn-primary" @click="setDotaOn()">启动Dota2爬虫</button>
+					<button type="button" class="btn btn-danger" @click="setDotaOff()">停止Dota2爬虫</button>
+					<p>Dota2爬虫状态:<span :class="[dota_server]">■</span></p>
+				</div>
+				<div class="col-12 col-md-6 text_con console box">
+					<button type="button" class="btn btn-primary" @click="setCsOn()">启动Cs爬虫</button>
+					<button type="button" class="btn btn-danger" @click="setCsOff()">停止Cs爬虫</button>
+					<p>Cs爬虫状态:<span :class="[cs_server]">■</span></p>
+				</div>
+			</div>
+			<div class="box">
+				<p>设置BUFF的cookie</p>
+				<input class="cookieBox" v-model="buff_cookie" type="text">
+				<button @click="updataBuff()" class="btn btn-primary">更新cookie</button>
+			</div>
+			<div class="box">
+				<p>设置steam的cookie</p>
+				<input class="cookieBox" v-model="steam_cookie" type="text">
+				<button @click="updataSteam()" class="btn btn-primary">更新cookie</button>
+			</div>
+		</div>
+	</body>
+	<script src="js/vue.js"></script>
+	<script src="js/axios-0.18.0.js"></script>
+	<script>
+		let vm = new Vue({
+			el : "#app",
+			data :{
+				buff_cookie:"",
+				steam_cookie:"",
+				dota_server : false,
+				cs_server : false
+			},
+			created() {
+				this.getStatus();
+			},
+			methods:{
+				updataBuff(){
+					axios.post("/run/updataBuff",this.buff_cookie).then((e)=>{
+						if(e.data.code == 200){
+							console.log("更新成功");
+							alert(e.data.data);
+						}else if(e.data.code == 201){
+							console.error("错误");
+						}
+					})
+				},
+				updataSteam(){
+					axios.post("/run/updataSteam",this.steam_cookie).then((e)=>{
+						if(e.data.code == 200){
+							console.log("更新成功");
+							alert(e.data.data);
+						}else if(e.data.code == 201){
+							console.error("错误");
+						}
+					})
+				},
+				getStatus(){
+					axios.post("/run/isRunCs").then((e)=>{
+						if(e.data.code == 200){
+							if (e.data.data){
+								this.cs_server = "green-text"
+							}else {
+								this.cs_server = "red-text"
+							}
+						}else if(e.data.code == 201){
+							console.error("错误");
+						}
+					})
+					axios.post("/run/isRunDota").then((e)=>{
+						if(e.data.code == 200){
+							if (e.data.data){
+								this.dota_server = "green-text"
+							}else {
+								this.dota_server = "red-text"
+							}
+						}else if(e.data.code == 201){
+							console.error("错误");
+						}
+					})
+				},
+				//切换爬虫状态
+				setDotaOn(){
+					axios.post("/run/RunTheDota").then((e) =>{
+						if(e.data.code == 200){
+							alert(e.data.data);
+						}
+					})
+					this.getStatus();
+				},
+				setDotaOff(){
+					axios.post("/run/stopDota").then((e) =>{
+						if(e.data.code == 200){
+							alert(e.data.data);
+						}
+					})
+					this.getStatus();
+				},
+				setCsOn(){
+					axios.post("/run/RunTheCs").then((e) =>{
+						if(e.data.code == 200){
+							alert(e.data.data);
+						}
+					})
+					this.getStatus();
+				},
+				setCsOff(){
+					axios.post("/run/stopCs").then((e) =>{
+						if(e.data.code == 200){
+							alert(e.data.data);
+						}
+					})
+					this.getStatus();
+				}
+			}
+		})
+	</script>
+</html>

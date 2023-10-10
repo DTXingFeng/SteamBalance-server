@@ -10,8 +10,8 @@
 		<div class="container" id="app">
 			<h2 class="text_con">列表展示</h2>
 			<div class="buttonBox">
-				<button @click="getOffQuick()">倒余额最优</button>
-				<button @click="getQuickPriceData()">套现最优</button>
+				<button @click="getOffQuick()" class="btn btn-primary">倒余额最优</button>
+				<button @click="getQuickPriceData()" class="btn btn-primary">套现最优</button>
 			</div>
 			<div class="box" v-for="item in items">
 				<p>饰品名称:{{item.name}}</p>

@@ -24,7 +24,7 @@ public class DotaGetList {
                 java.net.URL url = new URL(URL.replace("{{num}}", s));
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.addRequestProperty("Cookie", BuffCookie.BUFFCOOKIE);
-                httpURLConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36 Edg/117.0.2045.41");
+                httpURLConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36 Edg/117.0.2045.60");
                 httpURLConnection.setRequestMethod("GET");
                 if (httpURLConnection.getResponseCode() == 200) {
                     //请求成功，获取数据

@@ -16,11 +16,6 @@ public class SteamBalanceServerApplication {
 		//开始初始化程序
 		log.info("检查必要文件");
 		new Inspect();
-		try {
-			new DotaPractice();
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 }

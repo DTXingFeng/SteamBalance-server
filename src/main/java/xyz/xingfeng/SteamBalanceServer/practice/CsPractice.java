@@ -24,7 +24,7 @@ import static xyz.xingfeng.SteamBalanceServer.practice.DotaPractice.getPriceItem
 public class CsPractice {
     public CsPractice() throws Exception {
 
-        setProperty("127.0.0.1","7890");
+//        setProperty("127.0.0.1","26501");
         while (true) {
             CSGetList getList = new CSGetList();
             ArrayList<Item> items = getList.getItems();

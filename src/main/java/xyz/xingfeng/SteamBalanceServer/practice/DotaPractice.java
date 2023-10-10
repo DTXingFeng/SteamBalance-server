@@ -23,7 +23,7 @@ import java.util.Date;
 public class DotaPractice {
     public DotaPractice() throws Exception {
 
-        setProperty("127.0.0.1","7890");
+//        setProperty("127.0.0.1","26501");
         while (true) {
             DotaGetList getList = new DotaGetList();
             ArrayList<Item> items = getList.getItems();
