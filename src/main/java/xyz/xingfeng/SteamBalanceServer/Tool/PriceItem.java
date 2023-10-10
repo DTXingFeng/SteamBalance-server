@@ -7,6 +7,16 @@ public class PriceItem {
     private float sell_min_price;
     private float quick_price;
 
+    private String id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public float getSell_min_price() {
         return sell_min_price;
     }

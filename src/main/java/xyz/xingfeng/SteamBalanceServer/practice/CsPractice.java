@@ -9,10 +9,14 @@ import xyz.xingfeng.SteamBalanceServer.Steam.Price;
 import xyz.xingfeng.SteamBalanceServer.Steam.Search;
 import xyz.xingfeng.SteamBalanceServer.Tool.FileDo;
 import xyz.xingfeng.SteamBalanceServer.Tool.PriceItem;
+import xyz.xingfeng.SteamBalanceServer.data.DataItem;
+import xyz.xingfeng.SteamBalanceServer.data.RecordDo;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import static xyz.xingfeng.SteamBalanceServer.practice.DotaPractice.getPriceItem;
 
@@ -33,8 +37,10 @@ public class CsPractice {
                 PriceItem sousuo = sousuo(item.getName());
                 //算出优惠
                 //buff底价/steam最高求购价*1.15
-                double offers = Float.parseFloat(item.getSell_min_price()) / sousuo.getQuick_price() * 1.15;
-                log.info("最终优惠" + offers);
+                double off_quick = Float.parseFloat(item.getSell_min_price()) / sousuo.getQuick_price() * 1.15;
+                log.info("求购优惠" + off_quick);
+                double off_sell = Float.parseFloat(item.getSell_min_price()) / sousuo.getSell_min_price() * 1.15;
+                log.info("底价优惠" + off_sell);
                 //需要多少折才能持平收益
                 //steam售价*打折 = buff出售价格*0.975的手续费
                 //打折 = buff出售价格*0.975的手续费/steam售价
@@ -48,7 +54,7 @@ public class CsPractice {
                 //buff最高求购价-steam最低售价*0.8
                 //buff的cs板块收取2.5%的手续费
                 double put = (Float.parseFloat(item.getQuick_price()) - sousuo.getSell_min_price() * 0.8) * 0.975;
-                if (offers < 0.8) {
+                if (off_quick < 0.8) {
                     log.info("卧槽出了");
                 }
                 if (put > 0.0 && sousuo.getSell_min_price() != 0.0){
@@ -57,8 +63,35 @@ public class CsPractice {
                     double zhuan = (100/(sousuo.getSell_min_price() * 0.8)) * put;
                     log.info("每一百块钱可赚" + zhuan);
                 }
+
+                if (quickPrice > 0) {
+                    //将数据都添加进记录
+                    DataItem dataItem = new DataItem();
+                    dataItem.setName(item.getName());
+                    //steam部分
+                    dataItem.setSteam_id(sousuo.getId());
+                    dataItem.setSteam_min_sell(sousuo.getSell_min_price());
+                    dataItem.setSteam_quick(sousuo.getSell_min_price());
+                    //buff部分
+                    dataItem.setBuff_id(String.valueOf(item.getAppid()));
+                    dataItem.setBuff_min_sell(Double.parseDouble(item.getSell_min_price()));
+                    dataItem.setBuff_quick(Double.parseDouble(item.getQuick_price()));
+                    //综合部分
+                    dataItem.setOff_quick(off_quick);
+                    dataItem.setOff_sell(off_sell);
+                    dataItem.setQuick_price(quickPrice);
+                    dataItem.setSell_price(sellPrice);
+                    //生成时间
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    Date date = new Date(System.currentTimeMillis());
+                    dataItem.setDate(formatter.format(date));
+
+                    //进行更新
+                    new RecordDo().upData(dataItem);
+
+                }
                 //完成一个饰品筛选，休息五秒
-                Thread.sleep(5000);
+                Thread.sleep(20000);
             }
         }
     }
