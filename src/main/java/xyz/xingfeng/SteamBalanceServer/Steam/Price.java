@@ -22,10 +22,13 @@ public class Price {
     String purchasePrice;
     //出售价
     String sellingPrice;
+    //在售
+    String buy_num;
 
     int code = 199;
     public static final String urL = "https://steamcommunity.com/market/itemordershistogram?country=CN&language=schinese&currency=23&item_nameid={{id}}&two_factor=0";
     private StringBuilder response;
+
 
     public int getCode() {
         return code;
@@ -78,6 +81,9 @@ public class Price {
                 JSONObject jsonObject = new JSONObject(response.toString());
                 String sell_order_table = jsonObject.getString("buy_order_summary");
                 String sell_order_summary = jsonObject.getString("sell_order_summary");
+                //获得在售数量
+                buy_num = jsonObject.getString("highest_buy_order");
+
 
                 //json内容中有html格式，交给jsoup解析
                 //System.out.println(sell_order_table);
@@ -121,4 +127,10 @@ public class Price {
     public void setSellingPrice(String sellingPrice) {
         this.sellingPrice = sellingPrice;
     }
+
+    public String getBuy_num() {
+        return buy_num;
+    }
+
+
 }

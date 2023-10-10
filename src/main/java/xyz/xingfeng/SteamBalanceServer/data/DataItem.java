@@ -27,6 +27,12 @@ public class DataItem {
     //饰品在buff中的最高求购价
     private double buff_quick;
 
+
+    //buff在售
+    private int buff_buy_num;
+    //steam在售
+    private String steam_buy_num;
+
     //打折余额
     //出售(挂售)
     private double off_sell;
@@ -75,7 +81,25 @@ public class DataItem {
         jsonObject.put("sell_price",sell_price);
         jsonObject.put("quick_price",quick_price);
         jsonObject.put("date",date);
+        jsonObject.put("buff_buy_num",buff_buy_num);
+        jsonObject.put("steam_buy_num",steam_buy_num);
         return jsonObject;
+    }
+
+    public int getBuff_buy_num() {
+        return buff_buy_num;
+    }
+
+    public void setBuff_buy_num(int buff_buy_num) {
+        this.buff_buy_num = buff_buy_num;
+    }
+
+    public String getSteam_buy_num() {
+        return steam_buy_num;
+    }
+
+    public void setSteam_buy_num(String steam_buy_num) {
+        this.steam_buy_num = steam_buy_num;
     }
 
     public String getName() {

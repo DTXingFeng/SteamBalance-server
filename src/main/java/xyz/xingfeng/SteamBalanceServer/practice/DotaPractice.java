@@ -87,6 +87,9 @@ public class DotaPractice {
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     Date date = new Date(System.currentTimeMillis());
                     dataItem.setDate(formatter.format(date));
+                    //在售数量
+                    dataItem.setBuff_buy_num(item.getSell_num());
+                    dataItem.setSteam_buy_num(sousuo.getBuy_num());
 
                     //进行更新
                     new RecordDo().upData(dataItem);
@@ -127,6 +130,7 @@ public class DotaPractice {
                 PriceItem pi = new PriceItem();
                 pi.setId(item.getString("item_id"));
                 Price price = new Price(item.getString("item_id"));
+                pi.setBuy_num(price.getBuy_num());
                 if (frequentState(log, pi, price)) break;
                 //只要一个
                 return pi;
@@ -147,6 +151,7 @@ public class DotaPractice {
             //查看id为item.getId()的饰品价格
             Price price = new Price(item.getId());
             pi.setId(item.getId() );
+            pi.setBuy_num(price.getBuy_num());
             if (frequentState(log, pi, price)) break;
             //只要一个
             log.info(item.getName());

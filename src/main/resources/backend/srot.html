@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<link rel="stylesheet" href="plugin/bootstrap-5.3.0-alpha1-dist/css/bootstrap.css"/>
+	<link rel="stylesheet" href="css/srot.css">
+	<body>
+		<div class="container" id="app">
+			<h2 class="text_con">列表展示</h2>
+			<div class="buttonBox">
+				<button @click="getOffQuick()">倒余额最优</button>
+				<button @click="getQuickPriceData()">套现最优</button>
+			</div>
+			<div class="box" v-for="item in items">
+				<p>饰品名称:{{item.name}}</p>
+				<table class="value">
+					<tr>
+						<td>buff最低售价:{{item.buff_min_sell}}</td>
+						<td>buff最高求购:{{item.buff_quick}}</td>
+					</tr>
+					<tr>
+						<td>buff在售:{{item.buff_buy_num}}</td>
+						<td>steam在售:{{item.steam_buy_num}}</td>
+					</tr>
+					<tr>
+						<td>steam最低售价:{{item.steam_min_sell}}</td>
+						<td>steam最高求购{{item.steam_quick}}</td>
+					</tr>
+					<tr>
+						<td>倒余额（底价）:<span :class='[item.off_sell < 0.75 ?"good":"ordinary",item.off_sell > 0.8?"bed":""]'>{{item.off_sell}}</span></td>
+						<td>倒余额（求购）:<span :class='[item.off_quick < 0.75 ?"good":"ordinary",item.off_quick > 0.8?"bed":""]'>{{item.off_quick}}</span></td>
+					</tr>
+					<tr>
+						<td>套现（底价）:<span :class='[item.sell_price > 1 ?"good":"ordinary",item.sell_price < 0.8?"bed":""]'>{{item.sell_price}}</span></td>
+						<td>套现（求购）:<span :class='[item.quick_price > 1 ?"good":"ordinary",item.quick_price < 0.8?"bed":""]'>{{item.quick_price}}</span></td>
+					</tr>
+				</table>
+				<span class="date">最后更新时间:{{item.date}}</span>
+			</div>
+			
+		</div>
+	</body>
+	<script src="js/vue.js"></script>
+	<script src="js/axios-0.18.0.js"></script>
+	<script>
+		let vm = new Vue({
+			el : "#app",
+			data :{
+				items:[]
+			},
+			created() {
+				this.getQuickPriceData();
+			},
+			methods:{
+				getQuickPriceData(){
+					this.items = [];
+					axios.get("/sort/quickPrice").then((e) => {
+						if(e.data.code === 200){
+							this.items = e.data.data;
+						}else if(e.data.code === 201){
+							console.log("啥玩意");
+						}
+					})
+				},
+				getOffQuick(){
+					this.items = [];
+					axios.get("/sort/offQuick").then((e) => {
+						if(e.data.code === 200){
+							this.items = e.data.data;
+						}else if(e.data.code === 201){
+							console.log("啥玩意");
+						}
+					})
+				}
+			}
+		})
+	</script>
+</html>

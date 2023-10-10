@@ -27,7 +27,7 @@ public class RecordDo {
                 //然后把原来的删除
                 objects.remove(i);
                 //再把新的加进去
-                objects.put(dataItem);
+                objects.put(dataItem.toJson());
                 fileDo.fugai(objects.toString());
                 return;
             }

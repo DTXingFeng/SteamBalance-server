@@ -6,6 +6,15 @@ import lombok.extern.slf4j.Slf4j;
 public class PriceItem {
     private float sell_min_price;
     private float quick_price;
+    private String buy_num;
+
+    public String getBuy_num() {
+        return buy_num;
+    }
+
+    public void setBuy_num(String buy_num) {
+        this.buy_num = buy_num;
+    }
 
     private String id;
 

@@ -17,7 +17,7 @@ public class SteamBalanceServerApplication {
 		log.info("检查必要文件");
 		new Inspect();
 		try {
-			new CsPractice();
+			new DotaPractice();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

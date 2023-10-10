@@ -64,7 +64,7 @@ public class CsPractice {
                     log.info("每一百块钱可赚" + zhuan);
                 }
 
-                if (quickPrice > 0) {
+                if (quickPrice != off_quick) {
                     //将数据都添加进记录
                     DataItem dataItem = new DataItem();
                     dataItem.setName(item.getName());
@@ -85,6 +85,9 @@ public class CsPractice {
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     Date date = new Date(System.currentTimeMillis());
                     dataItem.setDate(formatter.format(date));
+                    //在售数量
+                    dataItem.setBuff_buy_num(item.getSell_num());
+                    dataItem.setSteam_buy_num(sousuo.getBuy_num());
 
                     //进行更新
                     new RecordDo().upData(dataItem);
