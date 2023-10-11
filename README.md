@@ -22,7 +22,7 @@ steam的cookie与buff的cookie
 - 最低在售
 - 最高求购
 # 网页的展示效果
-![image]([https://github.com/DTXingFeng/SteamBalance-server/blob/main/image/img.png](https://github.com/DTXingFeng/SteamBalance-server/blob/main/image/img.png))
+![image](https://github.com/DTXingFeng/SteamBalance-server/blob/main/image/img.png)
 # 一些要说的
 - 这个项目不使用数据库，使用的是json文件储存  
 - steam的爬虫爬一会就提示访问次数过多了，不知道是账号出问题了还是程序出问题了，如果有大佬知道还请告知
