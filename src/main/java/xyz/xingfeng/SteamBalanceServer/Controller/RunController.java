@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import xyz.xingfeng.SteamBalanceServer.Tool.FileDo;
+import xyz.xingfeng.SteamBalanceServer.lang.SleepSecond;
 import xyz.xingfeng.SteamBalanceServer.practice.CsPractice;
 import xyz.xingfeng.SteamBalanceServer.practice.DotaPractice;
 
@@ -117,20 +118,24 @@ public class RunController {
     //更新cookie
     @PostMapping(value = "/updataBuff", produces = "application/json; charset=UTF-8")
     public Result updataBuff(@RequestBody String json){
-        JSONObject jsonObject = new JSONObject(json);
-        String buff_cookie = jsonObject.getString("buff_cookie");
         FileDo fileDo = new FileDo(new File("config/BuffCookie"));
-        fileDo.fugai(buff_cookie);
+        fileDo.fugai(json);
         return new Result(Code.OK,"更新成功");
     }
 
     @PostMapping(value = "/updataSteam", produces = "application/json; charset=UTF-8")
     public Result updataSteam(@RequestBody String json){
-        JSONObject jsonObject = new JSONObject(json);
-        String steam_cookie = jsonObject.getString("steam_cookie");
         FileDo fileDo = new FileDo(new File("config/SteamCookie"));
-        fileDo.fugai(steam_cookie);
+        fileDo.fugai(json);
         return new Result(Code.OK,"更新成功");
+    }
+
+    @PostMapping(value = "/updataSleepSecond", produces = "application/json; charset=UTF-8")
+    public Result updataSleepSecond(@RequestBody SleepSecond sleepSecond){
+        JSONObject jsonObject = new JSONObject(sleepSecond);
+        FileDo fileDo = new FileDo(new File("config/SleepSecond.json"));
+        fileDo.fugai(jsonObject.toString());
+        return new Result(Code.OK,"成功");
     }
 
 

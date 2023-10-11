@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import xyz.xingfeng.SteamBalanceServer.Tool.SleepTime;
 import xyz.xingfeng.SteamBalanceServer.Tool.SteamCookie;
 
 import java.io.BufferedReader;
@@ -99,6 +100,11 @@ public class Price {
             } catch (Exception e) {
                 num++;
                 continue;
+            }
+            try {
+                Thread.sleep(1000L * SleepTime.normalRandomTime());
+            } catch (InterruptedException e1) {
+                throw new RuntimeException(e1);
             }
             break;
         }

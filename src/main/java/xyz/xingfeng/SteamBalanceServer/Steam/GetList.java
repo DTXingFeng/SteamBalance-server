@@ -7,6 +7,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import xyz.xingfeng.SteamBalanceServer.Tool.FileDo;
+import xyz.xingfeng.SteamBalanceServer.Tool.SleepTime;
 import xyz.xingfeng.SteamBalanceServer.Tool.SteamCookie;
 
 import java.io.BufferedReader;
@@ -84,6 +85,11 @@ public class GetList {
                 items.add(item);
 //                System.out.println(market_listing_item_name +"\n最低售价"+normal_price+"\t销售价格"+sale_price);
             }
+        }
+        try {
+            Thread.sleep(1000L * SleepTime.normalRandomTime());
+        } catch (InterruptedException e1) {
+            throw new RuntimeException(e1);
         }
     }
 

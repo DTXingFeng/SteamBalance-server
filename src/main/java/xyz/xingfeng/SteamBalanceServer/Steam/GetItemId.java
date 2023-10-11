@@ -1,5 +1,6 @@
 package xyz.xingfeng.SteamBalanceServer.Steam;
 
+import xyz.xingfeng.SteamBalanceServer.Tool.SleepTime;
 import xyz.xingfeng.SteamBalanceServer.Tool.SteamCookie;
 
 import java.io.BufferedReader;
@@ -46,10 +47,21 @@ public class GetItemId {
                 } else {
                     id = "0";
                 }
+                try {
+                    Thread.sleep(1000L * SleepTime.normalRandomTime());
+                } catch (InterruptedException e1) {
+                    throw new RuntimeException(e1);
+                }
                 break;
             } catch (Exception e) {
                 i++;
                 if (i > 5) {
+                    //休息
+                    try {
+                        Thread.sleep(1000L * SleepTime.normalRandomTime());
+                    } catch (InterruptedException e1) {
+                        throw new RuntimeException(e1);
+                    }
                     break;
                 }
             }

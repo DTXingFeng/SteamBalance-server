@@ -50,10 +50,8 @@ public class Search {
                     JSONObject jsonObject = new JSONObject(response.toString());
                     //获得html语句
                     String results_html = jsonObject.getString("results_html");
-//            System.out.println(results_html);
                     //解析html语句
                     Document parse = Jsoup.parse(results_html);
-//            System.out.println(parse.text());
                     //获得所有的物品链接
                     Elements market_listing_row_link = parse.getElementsByClass("market_listing_row_link");
                     items = new ArrayList<>();

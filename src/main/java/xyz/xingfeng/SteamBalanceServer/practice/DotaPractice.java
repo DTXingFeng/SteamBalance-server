@@ -10,6 +10,7 @@ import xyz.xingfeng.SteamBalanceServer.Steam.Price;
 import xyz.xingfeng.SteamBalanceServer.Steam.Search;
 import xyz.xingfeng.SteamBalanceServer.Tool.FileDo;
 import xyz.xingfeng.SteamBalanceServer.Tool.PriceItem;
+import xyz.xingfeng.SteamBalanceServer.Tool.SleepTime;
 import xyz.xingfeng.SteamBalanceServer.data.DataItem;
 import xyz.xingfeng.SteamBalanceServer.data.RecordDo;
 
@@ -167,9 +168,9 @@ public class DotaPractice {
     public static boolean frequentState(Logger log, PriceItem pi, Price price) {
         if (price.getCode() == 429){
             //访问次数太多需要休息
-            //休息一分钟
+            //休息
             try {
-                Thread.sleep(1000*60*2);
+                Thread.sleep(1000L * SleepTime.wranRandomTime());
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

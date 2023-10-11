@@ -31,6 +31,18 @@
 				<input class="cookieBox" v-model="steam_cookie" type="text">
 				<button @click="updataSteam()" class="btn btn-primary">更新cookie</button>
 			</div>
+
+			<div class="box">
+				<p>设置每次爬取操作后的休息时间区间(单位：秒)</p>
+				<input class="second_input" v-model="sleep_second.normal_start" type="number">
+				-
+				<input class="second_input" v-model="sleep_second.normal_end" type="number">
+				<p>设置每次被警告操作过多后的休息时间区间(单位：秒)</p>
+				<input class="second_input" v-model="sleep_second.warn_start" type="number">
+				-
+				<input class="second_input" v-model="sleep_second.warn_end" type="number">
+				<button @click="upSleepSecond()">保存</button>
+			</div>
 		</div>
 	</body>
 	<script src="js/vue.js"></script>
@@ -42,7 +54,13 @@
 				buff_cookie:"",
 				steam_cookie:"",
 				dota_server : false,
-				cs_server : false
+				cs_server : false,
+				sleep_second:{
+					warn_start : 0,
+					warn_end : 0,
+					normal_start: 0,
+					normal_end : 0
+ 				}
 			},
 			created() {
 				this.getStatus();
@@ -124,6 +142,13 @@
 						}
 					})
 					this.getStatus();
+				},
+				upSleepSecond(){
+					axios.post("/run/updataSleepSecond",this.sleep_second).then((e) =>{
+						if(e.data.code == 200){
+							alert(e.data.data);
+						}
+					})
 				}
 			}
 		})

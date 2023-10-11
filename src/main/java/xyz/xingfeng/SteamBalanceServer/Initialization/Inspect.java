@@ -78,6 +78,29 @@ public class Inspect {
                 throw new RuntimeException(e);
             }
         }
+        file = new File("config/SleepSecond.json");
+        if (!file.exists()){
+            //不存在
+            log.info("文件不存在，进行初始化");
+            try {
+                if (file.createNewFile()){
+                    FileWriter fileWriter = new FileWriter(file);
+                    fileWriter.write("{\n" +
+                            " \"warn_start\": 1,\n" +
+                            " \"warn_end\": 1,\n" +
+                            " \"normal_start\": 1,\n" +
+                            " \"normal_end\": 1\n" +
+                            "}");
+                    fileWriter.close();
+                    log.info("创建成功");
+                }else {
+                    log.error("创建失败");
+                }
+            } catch (IOException e) {
+                log.error("创建文件”SleepSecond.json“时发生了未知错误”");
+                throw new RuntimeException(e);
+            }
+        }
         log.info("初始化完成");
     }
 }
