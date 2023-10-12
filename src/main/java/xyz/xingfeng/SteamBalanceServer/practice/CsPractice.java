@@ -8,6 +8,7 @@ import xyz.xingfeng.SteamBalanceServer.Buff.Item;
 import xyz.xingfeng.SteamBalanceServer.Steam.Price;
 import xyz.xingfeng.SteamBalanceServer.Steam.Search;
 import xyz.xingfeng.SteamBalanceServer.Tool.FileDo;
+import xyz.xingfeng.SteamBalanceServer.Tool.IpPool;
 import xyz.xingfeng.SteamBalanceServer.Tool.PriceItem;
 import xyz.xingfeng.SteamBalanceServer.data.DataItem;
 import xyz.xingfeng.SteamBalanceServer.data.RecordDo;
@@ -24,7 +25,11 @@ import static xyz.xingfeng.SteamBalanceServer.practice.DotaPractice.getPriceItem
 public class CsPractice {
     public CsPractice() throws Exception {
 
-//        setProperty("127.0.0.1","26501");
+        //切换ip
+        clearProperty();
+        IpPool ipPool = new IpPool();
+        log.info("新ip"+ipPool.getIp()+"新端口"+ipPool.getPort());
+        setProperty(ipPool.getIp(), ipPool.getPort());
         while (true) {
             CSGetList getList = new CSGetList();
             ArrayList<Item> items = getList.getItems();
@@ -44,9 +49,8 @@ public class CsPractice {
                 //需要多少折才能持平收益
                 //steam售价*打折 = buff出售价格*0.975的手续费
                 //打折 = buff出售价格*0.975的手续费/steam售价
-                double quickPrice = Float.parseFloat(item.getQuick_price())*0.975 /sousuo.getSell_min_price();
-                double sellPrice = Float.parseFloat(item.getSell_min_price())*0.975 /sousuo.getSell_min_price();
-
+                double quickPrice = Float.parseFloat(item.getQuick_price()) * 0.975 / sousuo.getSell_min_price();
+                double sellPrice = Float.parseFloat(item.getSell_min_price()) * 0.975 / sousuo.getSell_min_price();
                 log.info("如果打算丢求购，需要" + quickPrice + "折余额才能回本");
                 log.info("如果打算慢慢卖，需要" + sellPrice + "折余额才能回本");
                 //计算出如果提现会赚多少钱
@@ -57,13 +61,11 @@ public class CsPractice {
                 if (off_quick < 0.8) {
                     log.info("卧槽出了");
                 }
-                if (put > 0.0 && sousuo.getSell_min_price() != 0.0){
-                    log.info("买"+item.getName()+"可以赚" + put);
-
-                    double zhuan = (100/(sousuo.getSell_min_price() * 0.8)) * put;
+                if (put > 0.0 && sousuo.getSell_min_price() != 0.0) {
+                    log.info("买" + item.getName() + "可以赚" + put);
+                    double zhuan = (100 / (sousuo.getSell_min_price() * 0.8)) * put;
                     log.info("每一百块钱可赚" + zhuan);
                 }
-
                 if (quickPrice != off_quick) {
                     //将数据都添加进记录
                     DataItem dataItem = new DataItem();
@@ -88,13 +90,9 @@ public class CsPractice {
                     //在售数量
                     dataItem.setBuff_buy_num(item.getSell_num());
                     dataItem.setSteam_buy_num(sousuo.getBuy_num());
-
                     //进行更新
                     new RecordDo().upData(dataItem);
-
                 }
-                //完成一个饰品筛选，休息五秒
-                Thread.sleep(20000);
             }
         }
     }
@@ -111,6 +109,14 @@ public class CsPractice {
         System.setProperty("https.proxyHost", Host);
         System.setProperty("https.proxyPort", Port);
     }
+
+    public void clearProperty() {
+        System.clearProperty("http.proxyHost");
+        System.clearProperty("http.proxyPort");
+        System.clearProperty("https.proxyHost");
+        System.clearProperty("https.proxyPort");
+    }
+
 
     public PriceItem sousuo(String name) throws IOException {
         //先看看json文件有没有数据

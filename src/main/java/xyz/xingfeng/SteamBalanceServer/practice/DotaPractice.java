@@ -9,6 +9,7 @@ import xyz.xingfeng.SteamBalanceServer.Buff.Item;
 import xyz.xingfeng.SteamBalanceServer.Steam.Price;
 import xyz.xingfeng.SteamBalanceServer.Steam.Search;
 import xyz.xingfeng.SteamBalanceServer.Tool.FileDo;
+import xyz.xingfeng.SteamBalanceServer.Tool.IpPool;
 import xyz.xingfeng.SteamBalanceServer.Tool.PriceItem;
 import xyz.xingfeng.SteamBalanceServer.Tool.SleepTime;
 import xyz.xingfeng.SteamBalanceServer.data.DataItem;
@@ -24,7 +25,11 @@ import java.util.Date;
 public class DotaPractice {
     public DotaPractice() throws Exception {
 
-//        setProperty("127.0.0.1","26501");
+        //切换ip
+        clearProperty();
+        IpPool ipPool = new IpPool();
+        log.info("新ip"+ipPool.getIp()+"新端口"+ipPool.getPort());
+        setProperty(ipPool.getIp(), ipPool.getPort());
         while (true) {
             DotaGetList getList = new DotaGetList();
             ArrayList<Item> items = getList.getItems();
@@ -95,9 +100,6 @@ public class DotaPractice {
                     //进行更新
                     new RecordDo().upData(dataItem);
                 }
-
-                //完成一个饰品筛选，休息五秒
-                Thread.sleep(20000);
             }
         }
     }
@@ -106,13 +108,20 @@ public class DotaPractice {
     /**
      * 设置代理
      */
-    public void setProperty(String Host,String Port){
+    public static void setProperty(String Host, String Port){
         System.setProperty("http.proxyHost", Host);
         System.setProperty("http.proxyPort", Port);
 
         // 对https也开启代理
         System.setProperty("https.proxyHost", Host);
         System.setProperty("https.proxyPort", Port);
+    }
+
+    public static void clearProperty() {
+        System.clearProperty("http.proxyHost");
+        System.clearProperty("http.proxyPort");
+        System.clearProperty("https.proxyHost");
+        System.clearProperty("https.proxyPort");
     }
 
     public PriceItem sousuo(String name) throws IOException {
@@ -169,15 +178,27 @@ public class DotaPractice {
         if (price.getCode() == 429){
             //访问次数太多需要休息
             //休息
-            try {
-                Thread.sleep(1000L * SleepTime.wranRandomTime());
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+//            try {
+//                Thread.sleep(1000L * SleepTime.wranRandomTime());
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException(e);
+//            }
+            //切换ip
+            clearProperty();
+            IpPool ipPool = new IpPool();
+            log.info("新ip"+ipPool.getIp()+"新端口"+ipPool.getPort());
+            setProperty(ipPool.getIp(), ipPool.getPort());
             return true;
         }
         log.info("steam在售底价:"+price.getSellingPrice());
         log.info("steam求购最高价:"+price.getPurchasePrice());
+        if (price.getSellingPrice() == null && price.getPurchasePrice() == null){
+            //切换ip
+            clearProperty();
+            IpPool ipPool = new IpPool();
+            log.info("新ip"+ipPool.getIp()+"新端口"+ipPool.getPort());
+            setProperty(ipPool.getIp(), ipPool.getPort());
+        }
         pi.setQuick_price(price.getPurchasePrice());
         pi.setSell_min_price(price.getSellingPrice());
         return false;

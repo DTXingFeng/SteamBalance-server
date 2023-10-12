@@ -12,6 +12,7 @@ import xyz.xingfeng.SteamBalanceServer.practice.CsPractice;
 import xyz.xingfeng.SteamBalanceServer.practice.DotaPractice;
 
 import java.io.File;
+import java.io.IOException;
 
 @Slf4j
 @RestController
@@ -82,7 +83,9 @@ public class RunController {
                 try {
                     // 执行可能抛出异常的任务
                     new CsPractice();
-                } catch (Exception e) {
+                }catch (IOException e){
+                    log.error("任务发生异常: " + e.getMessage());
+                }catch (Exception e) {
                     log.error("任务发生异常: " + e.getMessage());
                     break;
                 }
