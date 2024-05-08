@@ -43,6 +43,7 @@ steam的cookie与buff的cookie
 >  "results_html": "\t<div class=\"market_listing_table_header\">...."
 > }
 > ```
+> 也可以在请求参数中添加norender=1返回json格式的数据
 > results_html中包含了
 > - 饰品详情的链接  
 > - 饰品缩略图
